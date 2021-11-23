@@ -1,0 +1,22 @@
+﻿<Page x:Class="T3UploaderWPF.UI.View.FileListView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:T3UploaderWPF.UI.View"
+      xmlns:data="using T3UploaderWPF.UI.Data"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FileListView">
+
+    <Grid>
+        <ListView x:Name="lv_files" MouseLeftButtonUp="Lv_files_MouseLeftButtonUp" >
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="data:CustomFile">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
+</Page>

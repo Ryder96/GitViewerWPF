@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="assets\FolderOpened\FolderOpened_16x.png" />
+		<None Remove="FolderOpened_16x.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LibGit2Sharp" Version="0.26.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="assets\FolderOpened\FolderOpened_16x.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="settings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>
