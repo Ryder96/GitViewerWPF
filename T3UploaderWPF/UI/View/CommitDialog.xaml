@@ -35,8 +35,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Label Content="Inserisci breve messaggio sulle modifiche fatte" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Label x:Name="l_header" Content="Inserisci breve messaggio sulle modifiche fatte" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBox x:Name="tb_message" Grid.Row="1" Margin="8" Padding="8"/>
+        <TextBlock x:Name="tblk_message" Visibility="Hidden"  Grid.Row="1" Margin="8" Padding="8" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="okButton" Click="OkButton_Click" IsDefault="True">OK</Button>
             <Button Name="cancelButton" IsCancel="True">Cancel</Button>

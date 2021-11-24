@@ -11,7 +11,6 @@
     <Grid>
         <RichTextBox IsReadOnly="true">
             <FlowDocument x:Name="fd_document">
-                <Paragraph>Hello World</Paragraph>
             </FlowDocument>
         </RichTextBox>
     </Grid>

@@ -20,6 +20,7 @@ namespace T3UploaderWPF.Settings
         private readonly string _settingsFilePath = "settings.json";
         public Settings? Settings { get; private set; }
         public static SettingsManager Instance { get { return _instance.Value; } }
+
         private SettingsManager() { }
 
         public ErrorHandler ImportSettings()

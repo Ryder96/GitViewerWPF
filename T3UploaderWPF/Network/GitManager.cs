@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
+using T3UploaderWPF.Network.Data;
 using T3UploaderWPF.Settings;
 using T3UploaderWPF.UI.Data;
 
@@ -17,22 +18,15 @@ namespace T3UploaderWPF.Network
     public class GitManager
     {
         private static readonly Lazy<GitManager> LazyGitManager = new(() => new GitManager());
-        private bool _linkedToRemote;
-        private string[] _branches;
         private UsernamePasswordCredentials _usernamePasswordCredentials;
-        private bool _initialized;
-
 
         public string RemoteRepository { get; private set; }
         public string LocalRepository { get; set; } = string.Empty;
         public Signature? Author { get; private set; }
 
-
-
         public static GitManager Instance { get { return LazyGitManager.Value; } }
         private GitManager()
         { }
-
 
         public ErrorHandler Initialize(SettingsGit settings)
         {
@@ -53,14 +47,6 @@ namespace T3UploaderWPF.Network
             else
             {
                 sb.AppendLine("Missing author");
-            }
-            if (settings.Braches != null)
-            {
-                _branches = settings.Braches;
-            }
-            else
-            {
-                sb.AppendLine("Missing braches");
             }
 
             if (settings.Account != null)
@@ -121,6 +107,17 @@ namespace T3UploaderWPF.Network
 
             if (!branchName.Equals("master"))
                 Commands.Checkout(repo, "master");
+        }
+
+        public GitCommitStatus LastCommitStatus()
+        {
+            using var repo = new Repository(LocalRepository);
+            var status = repo.RetrieveStatus();
+            var branch = repo.Branches["master"];
+            var tracking = branch.TrackingDetails;
+
+            var dirty = tracking.AheadBy > 0;
+            return new GitCommitStatus { Dirty = dirty, Message = branch.Commits.First().Message };
         }
 
         public string? Clone(string workspaceDirectory, string root)
@@ -194,14 +191,14 @@ namespace T3UploaderWPF.Network
             {
                 // check commits append
                 var status = repo.RetrieveStatus();
-                if (status.IsDirty)
+                if (repo.Diff.Compare<TreeChanges>().Count > 0 || status.Untracked.Any())
                 {
                     Commands.Stage(repo, "*");
                     var commit = repo.Commit(message, Author, Author);
                 }
                 var branch = repo.Branches["master"];
 
-                var remote = repo.Network.Remotes["origin"];
+                //var remote = repo.Network.Remotes["origins"];
                 //repo.Network.Push(remote, @$"refs/heads/master", options);
                 repo.Network.Push(branch, options);
                 result.Success = true;

@@ -41,10 +41,10 @@ namespace T3UploaderWPF
         {
             var checkSettings = SettingsManager.Instance.ImportSettings();
             if (!checkSettings.Success)
-                return;
+                Close();
             var checkInitialization = FileManager.Instance.InitializeWorkspace();
             if (!checkInitialization.Success)
-                return;
+                Close();
 
             _fileLister = new FileLister_MV(FileManager.Instance.GetPath());
             _localDocument = new Document_MV(new LocalDocumentModel());
@@ -52,6 +52,7 @@ namespace T3UploaderWPF
             SubscribeToEvents();
 
             InitializeComponent();
+            tb_folderPath.Text = FileManager.Instance.GetPath();
             localDocumentFrame.NavigationService.Navigate(new DocumentView(_localDocument));
             remoteDocumentFrame.NavigationService.Navigate(new DocumentView(_remoteDocument));
             treeViewFrame.NavigationService.Navigate(new FileListView(_fileLister));
@@ -92,23 +93,30 @@ namespace T3UploaderWPF
             string message = string.Empty;
             ErrorHandler? gitResponse = null;
 
+            var hasUncommittedChanges = GitManager.Instance.LastCommitStatus();
+
             var dialog = new CommitDialog();
+            if (hasUncommittedChanges.Dirty)
+            {
+                dialog.SetReadOnly(hasUncommittedChanges.Message);
+            }
+
             var result = dialog.ShowDialog();
-            if (result == true)
+            if (result == true && !dialog.ReadOnly)
             {
                 if (!string.IsNullOrEmpty(dialog.Message))
                     message = dialog.Message;
                 else
                     message = $"Update changes at {DateTime.UtcNow.ToLongTimeString()}";
             }
-            else
+            else if (result == false)
             {
                 return;
             }
+
             switch (button.Uid)
             {
                 case "master":
-                    System.Diagnostics.Debug.WriteLine("Pushing at master with message: " + message);
                     gitResponse = GitManager.Instance.PushToRemote(message, "master");
                     break;
                 case "dev":
@@ -125,7 +133,7 @@ namespace T3UploaderWPF
             }
             else if (gitResponse != null)
             {
-                MessageBox.Show(gitResponse?.ShowError());
+                MessageBox.Show(gitResponse?.ShowError(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }

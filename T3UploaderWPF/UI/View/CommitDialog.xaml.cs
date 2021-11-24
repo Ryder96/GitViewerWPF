@@ -20,20 +20,30 @@ namespace T3UploaderWPF.UI.View
     public partial class CommitDialog : Window
     {
         public string Message { get; set; } = string.Empty;
+        public bool ReadOnly { get; set; }
         public CommitDialog()
         {
+            ReadOnly = false;
             InitializeComponent();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) { }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
             Message = tb_message.Text;
+        }
+
+
+        public void SetReadOnly(string message)
+        {
+            tb_message.Visibility = Visibility.Hidden;
+
+            l_header.Content = "Old commit";
+            tblk_message.Text = message;
+            tblk_message.Visibility = Visibility.Visible;
+            ReadOnly = true;
         }
     }
 }

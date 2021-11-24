@@ -5,11 +5,16 @@
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
+		<ApplicationIcon>git64.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Remove="assets\FolderOpened\FolderOpened_16x.png" />
 		<None Remove="FolderOpened_16x.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="git64.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -22,6 +27,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>SettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
 	  <None Update="settings.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
